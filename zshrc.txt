@@ -113,3 +113,82 @@ export NVM_DIR="$HOME/.nvm"
 . /code/docker/bash_aliases
 ### DOCKER_ALIAS ###
 . /code/docker/git_svn_bash_prompt/git_svn_bash_prompt.sh
+
+
+--------------------------- VIMRC
+" add line numbers
+set number
+
+colorscheme gruvbox
+set background=dark    " Setting dark mode
+set statusline+=\ %t%y\~(%{Gitbranch()})
+set encoding=UTF-8
+let g:blamer_enabled = 1
+set laststatus=2
+
+call plug#begin()
+" The default plugin directory will be as follows:
+"   - Vim (Linux/macOS): '~/.vim/plugged'
+" Make sure you use single quotes
+"Plug 'APZelos/blamer.nvim'
+Plug 'morhetz/gruvbox'
+Plug 'fatih/vim-go'
+Plug 'SirVer/ultisnips', {'for': ['sh', 'python', 'markdown']}
+Plug 'honza/vim-snippets', {'for': ['sh', 'python', 'markdown']}
+Plug 'ervandew/supertab'
+Plug 'zivyangll/git-blame.vim'
+Plug 'tpope/vim-fugitive'
+Plug 'rbong/vim-flog'
+Plug 'preservim/nerdtree'
+Plug 'ryanoasis/vim-devicons'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+Plug 'honza/vim-snippets', {'for': ['sh', 'python', 'markdown']}
+call plug#end()
+let mapleader = ","
+nnoremap <leader>q :q<cr>
+nnoremap <leader>w :w<cr>
+nnoremap <leader>f :Files<cr>
+nnoremap <leader>e :NERDTreeToggle<cr>
+nnoremap <leader>b :NERDTreeFocus<cr>
+nnoremap <leader>t :split<cr>
+nnoremap <Leader>g :<C-u>call gitblame#echo()<CR>
+
+function! GitBranch()
+  return system("git rev-parse --abbrev-ref HEAD 2>/dev/null | tr -d '\n'")
+endfunction
+
+function! StatuslineGit()
+  let l:branchname = GitBranch()
+  return strlen(l:branchname) > 0?'  '.l:branchname.' ':''
+endfunction
+let gitBranch=system("git rev-parse --abbrev-ref HEAD")
+set laststatus=2
+set statusline=%F%m%r%h%w\ [POS=%04l,%04v]\ [%p%%]\ [LEN=%L]
+execute "set statusline +=" . gitBranch
+set statusline=
+set statusline+=%#PmenuSel#
+set statusline+=%{StatuslineGit()}
+set statusline+=%#LineNr#
+set statusline+=\ %f
+set statusline+=%m\
+set statusline+=%=
+set statusline+=%#CursorColumn#
+set statusline+=\ %y
+set statusline+=\ %{&fileencoding?&fileencoding:&encoding}
+set statusline+=\[%{&fileformat}\]
+set statusline+=\ %p%%
+set statusline+=\ %l:%c
+set statusline+=\
+
+let g:SuperTabDefaultCompletionType    = '<C-n>'
+let g:SuperTabCrMapping                = 0
+let g:UltiSnipsExpandTrigger           = '<tab>'
+let g:UltiSnipsJumpForwardTrigger      = '<tab>'
+let g:UltiSnipsJumpBackwardTrigger     = '<s-tab>'
+let g:ycm_key_list_select_completion   = ['<C-j>', '<C-n>', '<Down>']
+let g:ycm_key_list_previous_completion = ['<C-k>', '<C-p>', '<Up>']
+
+let g:UltiSnipsEditSplit="vertical"
+let g:UltiSnipsListSnippets="<c-t>"
+
